@@ -9,6 +9,7 @@ const swaggerSpec = require('../swagger');
 const { requestLogger, errorLogger } = require('./services/logging');
 const { limiter } = require('./middleware/policies');
 const { securityHeaders } = require('./middleware/security');
+const { metricsMiddleware } = require('./middleware/metrics');
 const { withServers } = require('./docs/openapi');
 
 // Initialize express app
@@ -38,6 +39,9 @@ app.use(cors({
 
 // Global request logger and JSON parser
 app.use(requestLogger);
+
+// Metrics collection middleware
+app.use(metricsMiddleware());
 
 // Content type validation middleware
 app.use((req, res, next) => {

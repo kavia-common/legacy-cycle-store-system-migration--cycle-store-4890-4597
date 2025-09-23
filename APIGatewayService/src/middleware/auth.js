@@ -89,7 +89,8 @@ function requireAuth(req, res, next) {
       return res.status(401).json({ 
         status: 'error', 
         message: 'Unauthorized - Bearer token required',
-        requestId: req.requestId
+        requestId: req.requestId,
+        timestamp: new Date().toISOString()
       });
     }
     
