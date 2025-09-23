@@ -3,6 +3,7 @@ const express = require('express');
 const routes = require('./routes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
+const api = require('./routes/api');
 
 // Initialize express app
 const app = express();
@@ -43,13 +44,16 @@ app.use(express.json());
 
 // Mount routes
 app.use('/', routes);
+app.use('/api', api);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
+  const status = err.status || 500;
+  res.status(status).json({
     status: 'error',
-    message: 'Internal Server Error',
+    message: err.details?.message || err.message || 'Internal Server Error',
+    details: err.details || undefined,
   });
 });
 
